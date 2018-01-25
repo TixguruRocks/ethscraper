@@ -1,5 +1,6 @@
 import requests
 import json
+import simplejson
 import os
 import pprint
 import pandas as pd
@@ -22,16 +23,21 @@ def get_transactions(addr):
     df : Pandas dataframe
         The Etherscan API response as a Pandas dataframe
     """
-    filename = 'result.json'
-    if os.path.isfile(filename) != True:
-        r = requests.get(base_url.format(addr))
-        with open(filename, 'w') as file:
-            json.dump(r.json()['result'], file)
-        return pd.DataFrame(r.json()['result'])
-    else:
-        with open(filename, 'r') as file:
-            result = json.load(file)
-            return pd.DataFrame(result)
+    #filename = 'result.json'
+    #if os.path.isfile(filename) != True:
+    #    r = requests.get(base_url.format(addr))
+    #    with open(filename, 'w') as file:
+    #        json.dump(r.json()['result'], file)
+    #    return pd.DataFrame(r.json()['result'])
+    #else:
+    #    with open(filename, 'r') as file:
+    #        result = json.load(file)
+    #        return pd.DataFrame(result)
+
+    filename = 'raw_result'
+    r = requests.get(base_url.format(addr))
+    with open(filename, 'w') as file:
+        file.write(simplejson.dumps(r.json()['result'], indent=4, sort_keys=True))
 
 def preprocess(df):
     """Preprocess the transaction data before saving to csv files

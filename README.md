@@ -1,3 +1,26 @@
+# Tixguru Step-by-Step 使用方式
+
+1. 進入python virtual environment
+```
+cd ethscraper
+source venv_3/bin/active
+```
+
+2. 安裝必要套件
+```
+pip install requests pandas simplejson
+```
+
+3. 執行ethscraper.py
+```
+python ethscraper.py
+```
+
+4. 看Raw Data
+```
+vim raw_result
+```
+
 # ETHScraper
 Simple web dashboard, which tracks transactions for one specified address on the Ethereum blockchain
 ## Getting started
