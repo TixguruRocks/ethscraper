@@ -21,6 +21,28 @@ python ethscraper.py
 vim raw_result
 ```
 
+# 注意事項
+
+1. 目前只能看到此帳戶的資料
+
+```
+0x687aeda127fd2bd4f374c73e3724bf9b7c7a6b9c
+```
+
+2. 資料的名稱可以對照此網址
+https://etherscan.io/address/0x687aeda127fd2bd4f374c73e3724bf9b7c7a6b9c
+
+3. 如果想要查詢其他帳戶的資料，可以將ethscraper.py第11行的code改掉
+```
+address = '0x....'
+```
+
+# TODO
+
+1. 完整API的查詢功能實作
+
+https://etherscan.io/apis
+
 # ETHScraper
 Simple web dashboard, which tracks transactions for one specified address on the Ethereum blockchain
 ## Getting started
