@@ -1,4 +1,7 @@
 import requests
+import json
+import os
+import pprint
 import pandas as pd
 import numpy as np
 
@@ -19,8 +22,16 @@ def get_transactions(addr):
     df : Pandas dataframe
         The Etherscan API response as a Pandas dataframe
     """
-    r = requests.get(base_url.format(addr))
-    return pd.DataFrame(r.json()['result'])
+    filename = 'result.json'
+    if os.path.isfile(filename) != True:
+        r = requests.get(base_url.format(addr))
+        with open(filename, 'w') as file:
+            json.dump(r.json()['result'], file)
+        return pd.DataFrame(r.json()['result'])
+    else:
+        with open(filename, 'r') as file:
+            result = json.load(file)
+            return pd.DataFrame(result)
 
 def preprocess(df):
     """Preprocess the transaction data before saving to csv files
@@ -35,15 +46,15 @@ def preprocess(df):
     df : Pandas dataframe
         The preprocessed Pandas dataframe
     """
-    df.drop(df.columns[[0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 15]], axis=1, inplace=True)
+    df.drop(df.columns[[0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 15, 16]], axis=1, inplace=True)
 
     df['value'] = df['value'].astype(float)
     df['value'] = df['value'] / 1000000000000000000
-    df = df.loc[np.abs(df['value'] - df['value'].mean()) <= (3 * df['value'].std()), :]
-
     df['timeStamp'] = df['timeStamp'].astype(int)
     df['timeStamp'] = pd.to_datetime(df['timeStamp'], unit='s')
     df['timeStamp'] = df['timeStamp'].apply(lambda x: x.date())
+    df = df.loc[np.abs(df['value'] - df['value'].mean()) <= (3 * df['value'].std()), :]
+
     df.columns = ['from', 'date', 'to', 'value']
     df = df[['date', 'from', 'to', 'value']]
     return df
